@@ -16,8 +16,10 @@ class TwoFactorController extends Controller
 
         $user = auth()->user();
 
-        $user->two_factor_secret = encrypt($secret);
-        $user->save();
+        if ($user->two_factor_secret == null) {
+            $user->two_factor_secret = encrypt($secret);
+            $user->save();
+        }
 
         // Generate the QR code URL
         $QR_Image = $google2fa->getQRCodeInline(
